@@ -1,0 +1,4 @@
+# Question 4
+# Creation of Logistic Regression Model to predict Customer Churn
+classifier = LogisticRegression(random_state = 0)
+classifier.fit(X_train, y_train)
