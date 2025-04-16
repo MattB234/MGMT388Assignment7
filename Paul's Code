@@ -1,0 +1,35 @@
+# Question 1
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import LabelEncoder, StandardScaler
+from sklearn.linear_model import LogisticRegression
+from sklearn.tree import DecisionTreeClassifier, plot_tree
+from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, confusion_matrix, roc_curve, auc, classification_report
+file_path = "/Users/paulwilliams/Downloads/Lab 7 - Telco_Customer_Churn.csv"
+dataset = pd.read_csv(file_path)
+dataset.head()
+
+# Question 2
+dataset.describe(include='all')
+
+dataset.isnull().sum()
+
+dataset_numeric = dataset.select_dtypes(include=[np.number])
+plt.figure(figsize=(12, 8))
+sns.heatmap(dataset_numeric.corr(), annot=True, cmap='coolwarm')
+plt.title("Correlation Heatmap")
+
+sns.countplot(data=dataset, x='Churn')
+plt.title("Churn Distribution")
+
+plt.figure(figsize=(10, 5))
+sns.countplot(data=dataset, x='Churn', hue='Partner')
+plt.title("Partner vs Churn")
+
+dataset['Churn'] = dataset['Churn'].map({'No': 0, 'Yes': 1})
+dataset_numeric = dataset.select_dtypes(include=[np.number])
+print(dataset_numeric.corr()['Churn'].sort_values(ascending=False))
+
