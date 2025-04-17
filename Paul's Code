@@ -3,7 +3,6 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
-from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import LabelEncoder, StandardScaler
 from sklearn.linear_model import LogisticRegression
 from sklearn.tree import DecisionTreeClassifier, plot_tree
@@ -32,4 +31,35 @@ plt.title("Partner vs Churn")
 dataset['Churn'] = dataset['Churn'].map({'No': 0, 'Yes': 1})
 dataset_numeric = dataset.select_dtypes(include=[np.number])
 print(dataset_numeric.corr()['Churn'].sort_values(ascending=False))
+
+dataset['TotalCharges'] = pd.to_numeric(dataset['TotalCharges'], errors='coerce')
+dataset.dropna(subset=['TotalCharges'], inplace=True)
+
+# Question 3
+dataset.drop('customerID', axis=1, inplace=True)
+
+from sklearn.compose import ColumnTransformer
+from sklearn.preprocessing import OneHotEncoder
+X = dataset.drop('Churn', axis=1)
+y = dataset['Churn'].map({'No': 0, 'Yes': 1})  
+categorical_cols = X.select_dtypes(include='object').columns.tolist()
+ct = ColumnTransformer(
+    transformers=[('encoder', OneHotEncoder(drop='first'), categorical_cols)],
+    remainder='passthrough'
+)
+X_encoded = ct.fit_transform(X)
+
+scaler = StandardScaler(with_mean=False)
+X_scaled = scaler.fit_transform(X_encoded)
+
+from sklearn.model_selection import train_test_split
+X_train, X_test, y_train, y_test = train_test_split(X_scaled, y, test_size=0.2, random_state=42)
+print(X_test)
+print(y_test)
+
+from sklearn.linear_model import LogisticRegression
+classifier_lr = LogisticRegression(random_state = 0)
+classifier_lr.fit(X_train, y_train)
+
+
 
