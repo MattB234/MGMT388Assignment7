@@ -61,5 +61,22 @@ from sklearn.linear_model import LogisticRegression
 classifier_lr = LogisticRegression(random_state = 0)
 classifier_lr.fit(X_train, y_train)
 
+# Question 7
+tree_model = DecisionTreeClassifier()
+tree_model.fit(X_train, y_train)
+y_pred_tree = tree_model.predict(X_test)
 
+print(classification_report(y_test, y_pred_tree))
+
+#Question 8
+sns.heatmap(confusion_matrix(y_test, y_pred_tree), annot=True, fmt='d', cmap='Oranges')
+plt.title("Confusion Matrix - Decision Tree")
+
+fpr_tree, tpr_tree, _ = roc_curve(y_test, tree_model.predict_proba(X_test)[:, 1])
+plt.plot(fpr_tree, tpr_tree, label=f"AUC = {auc(fpr_tree, tpr_tree):.2f}")
+plt.plot([0, 1], [0, 1], 'k--')
+plt.xlabel("False Positive Rate")
+plt.ylabel("True Positive Rate")
+plt.title("ROC Curve - Decision Tree")
+plt.legend()
 
