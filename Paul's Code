@@ -41,7 +41,7 @@ dataset.drop('customerID', axis=1, inplace=True)
 from sklearn.compose import ColumnTransformer
 from sklearn.preprocessing import OneHotEncoder
 X = dataset.drop('Churn', axis=1)
-y = dataset['Churn'].map({'No': 0, 'Yes': 1})  
+y = dataset['Churn'] 
 categorical_cols = X.select_dtypes(include='object').columns.tolist()
 ct = ColumnTransformer(
     transformers=[('encoder', OneHotEncoder(drop='first'), categorical_cols)],
