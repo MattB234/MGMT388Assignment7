@@ -14,6 +14,7 @@ cm = confusion_matrix(y_test, y_pred_log)
 print(cm)
 
 # Calculate ROC curve
+y_pred_proba = log_model.predict_proba(X_test)[:, 1]
 fpr, tpr, thresholds = roc_curve(y_test, y_pred_proba) 
 roc_auc = auc(fpr, tpr)
 
@@ -26,4 +27,10 @@ plt.ylabel('True Positive Rate')
 plt.title('ROC Curve for Customer Churn')
 plt.legend()
 plt.grid(True)
+plt.show()
+
+# Question 9
+plt.figure(figsize=(20, 10))
+plot_tree(tree_model, filled=True, fontsize=8, feature_names=ct.get_feature_names_out())
+plt.title("Structure of Decision Tree")
 plt.show()
